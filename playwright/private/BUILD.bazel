@@ -1,0 +1,46 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+package(default_visibility = ["//visibility:private"])
+# Starlark library dependency graph.
+
+bzl_library(
+    name = "browser_bzl",
+    srcs = ["browser.bzl"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//playwright/private:common_bzl",
+        "//playwright/private:validation_bzl",
+    ],
+)
+
+bzl_library(
+    name = "common_bzl",
+    srcs = ["common.bzl"],
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "hub_bzl",
+    srcs = ["hub.bzl"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//playwright/private:common_bzl"],
+)
+
+bzl_library(
+    name = "playwright_bzl",
+    srcs = ["playwright.bzl"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//playwright/private:browser_bzl",
+        "//playwright/private:common_bzl",
+        "//playwright/private:hub_bzl",
+        "//playwright/private:validation_bzl",
+    ],
+)
+
+bzl_library(
+    name = "validation_bzl",
+    srcs = ["validation.bzl"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//playwright/private:common_bzl"],
+)

@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("@latticebuild_js//js:defs.bzl", "js_binary")
+load(":inventory.bzl", "browser_inventory")
+load(":validation_tests.bzl", "validation_test")
+
+package(
+    default_testonly = True,
+    default_visibility = ["//:__pkg__"],
+)
+
+validation_test(name = "validation_test")
+
+js_binary(
+    name = "browser_probe",
+    bin = "browser.mjs",
+    data = [
+        "@browser_packages//node_modules/effection",
+        "@browser_packages//node_modules/playwright-core",
+    ],
+)
+
+browser_inventory(
+    name = "browser_inventory",
+    browser = "@browser_payload//:chromium",
+)
+
+go_test(
+    name = "browser_test",
+    srcs = ["browser_test.go"],
+    data = [
+        ":browser_inventory",
+        ":browser_probe",
+        "@browser_payload//:chromium",
+    ],
+    env = {
+        "BROWSER_PROBE": "$(rlocationpath :browser_probe)",
+        "BROWSER_INVENTORY": "$(rlocationpath :browser_inventory)",
+    },
+    tags = ["no-sandbox"],
+    deps = ["@io_bazel_rules_go//go/runfiles"],
+)
