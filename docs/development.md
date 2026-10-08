@@ -11,10 +11,9 @@ bazel build //:artifacts
 bazel test //:test
 ```
 
-Native CI runs these gates on Ubuntu 24.04, macOS 15, and Windows 2025.
+Native CI runs these gates on Ubuntu 24.04, macOS 27, and Windows 2025.
 See [usage.md](usage.md) for setup and supported inputs.
 
-On Windows, use a temporary root with its canonical long path. Vite rejects 8.3
-aliases in served paths. CI selects LOCALAPPDATA/Temp/latticebuild before dependency preparation and
-forwards TMP/TEMP through Bazel tests; private runtime trees remain inside that
-root. Keep this path out of installed source and dependency directories.
+On Windows, CI creates LOCALAPPDATA/Temp/latticebuild before Mise installs
+tools. This uses a canonical long path on the installation drive and forwards
+TMP/TEMP through Bazel tests. Private runtime trees remain inside that root.
