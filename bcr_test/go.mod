@@ -1,4 +1,4 @@
-module github.com/latticebuild/rules_playwright
+module example.com/latticebuild/playwright-consumer
 
 go 1.27.1
 

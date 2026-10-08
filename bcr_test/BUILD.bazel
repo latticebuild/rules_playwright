@@ -1,7 +1,11 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load(":inventory.bzl", "browser_inventory")
 
-exports_files(["browsers.json"])
+exports_files([
+    "browsers.json",
+    "go.mod",
+    "go.sum",
+])
 
 browser_inventory(
     name = "inventory",
@@ -23,8 +27,8 @@ go_test(
     },
     tags = ["no-sandbox"],
     deps = [
+        "@com_github_latticebuild_graceproc//:graceproc",
         "@io_bazel_rules_go//go/runfiles",
-        "@latticebuild_graceproc//:graceproc",
     ],
 )
 

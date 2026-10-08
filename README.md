@@ -12,7 +12,7 @@ Use Bazel 9.2 with Bzlmod. Until the module is registered in the Bazel Central
 Registry, pin a source revision in your root MODULE.bazel:
 
 ```starlark
-bazel_dep(name = "latticebuild_playwright", version = "0.1.0")
+bazel_dep(name = "latticebuild_playwright", version = "0.1.1")
 git_override(
     module_name = "latticebuild_playwright",
     remote = "https://github.com/latticebuild/rules_playwright.git",
