@@ -1,5 +1,9 @@
 # rules_playwright
 
+[![CI](https://github.com/latticebuild/rules_playwright/actions/workflows/ci.yml/badge.svg)](https://github.com/latticebuild/rules_playwright/actions/workflows/ci.yml)
+[![Bazel](https://img.shields.io/badge/Bazel-9.2.0-43A047?logo=bazel&logoColor=white)](MODULE.bazel)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 A Bazel module extension for checksum-pinned Playwright browser archives. The caller supplies the browser manifest and supported platform checksums; the generated hub selects the matching native payload.
 
 ## Setup
@@ -46,6 +50,18 @@ Chromium is currently supported. A platform missing from sha256 fails target
 selection; it never fetches a different platform’s archive. The browser-only
 module closure needs no Node or Go toolchain. Linux execution needs Chromium’s
 system libraries; the native Ubuntu CI image supplies them.
+
+<details>
+<summary>Repository map</summary>
+
+| Area | Location |
+| --- | --- |
+| Public API | [playwright/extensions.bzl](playwright/extensions.bzl) |
+| Implementation | [playwright/private/](playwright/private/) |
+| Owning checks | [tests/](tests/) |
+| Consumer guide | [docs/usage.md](docs/usage.md) |
+
+</details>
 
 ## Development
 

@@ -66,6 +66,6 @@ git_override(
 
 git_override(
     module_name = "latticebuild_js",
-    commit = "210ff23326791fba38faa74cd2870d922d2984f7",
+    commit = "13d7b1de76b19282dbc5dbc378ada1ef9ec10dd5",
     remote = "https://github.com/latticebuild/rules_js.git",
 )
