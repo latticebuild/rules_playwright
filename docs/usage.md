@@ -40,3 +40,15 @@ perform no runtime browser installation.
 Linux workers need Chromium's system libraries. The native Ubuntu CI image
 supplies them. Keep HOME and temporary files private to each test, and stop the
 browser process before releasing the test scope.
+
+On Linux, Chromium creates Unix sockets beneath TMPDIR. If your Bazel temporary
+path is long, give the browser launch a short temporary root:
+
+```javascript
+const launchOptions = {
+  env: { ...process.env, ...(process.platform === "linux" ? { TMPDIR: "/tmp" } : {}) },
+};
+```
+
+Playwright creates a private profile there and removes it when the browser is
+closed. Workspace actions continue to use their own scratch directories.

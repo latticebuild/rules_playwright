@@ -3,7 +3,12 @@ import { call, ensure, run } from "effection";
 import { chromium } from "playwright-core";
 
 run(function* () {
-  const server = yield* call(() => chromium.launchServer({ channel: "chromium", headless: true }));
+  const server = yield* call(() => chromium.launchServer({
+      channel: "chromium",
+      headless: true,
+      // Linux Unix sockets must fit inside Chromium's 108-byte path limit.
+      env: { ...process.env, ...(process.platform === "linux" ? { TMPDIR: "/tmp" } : {}) },
+    }));
   yield* ensure(function* () { yield* call(() => server.kill()); });
   const browser = yield* call(() => chromium.connect(server.wsEndpoint()));
   yield* ensure(function* () { yield* call(() => browser.close()); });
