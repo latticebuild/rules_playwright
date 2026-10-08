@@ -8,11 +8,11 @@ A Bazel module extension for checksum-pinned Playwright browser archives. The ca
 
 ## Setup
 
-Use Bazel 9.2 with Bzlmod. These source repositories have no registry release yet.
-Pin your chosen revision in your root MODULE.bazel:
+Use Bazel 9.2 with Bzlmod. Until the module is registered in the Bazel Central
+Registry, pin a source revision in your root MODULE.bazel:
 
 ```starlark
-bazel_dep(name = "latticebuild_playwright", version = "0.0.0")
+bazel_dep(name = "latticebuild_playwright", version = "0.1.0")
 git_override(
     module_name = "latticebuild_playwright",
     remote = "https://github.com/latticebuild/rules_playwright.git",
@@ -20,9 +20,7 @@ git_override(
 )
 ```
 
-Replace FULL_COMMIT_SHA with the full commit hash of that revision. Copy the
-Latticebuild dependency overrides from [MODULE.bazel](MODULE.bazel) into the
-consuming root too; overrides declared by a dependency do not propagate.
+Replace FULL_COMMIT_SHA with the full commit hash of that revision.
 
 ## Usage
 
@@ -30,7 +28,7 @@ consuming root too; overrides declared by a dependency do not propagate.
 playwright = use_extension("@latticebuild_playwright//playwright:extensions.bzl", "playwright")
 playwright.browser(
     name = "chromium",
-    manifest = "@npm//node_modules/playwright-core:browsers.json",
+    manifest = "//examples/browser:browsers.json",
     sha256 = {
         "darwin_arm64": "d64771a096fffd48b49a65e481dda50ae43a7de55fb93acfa6aece26ec3b10db",
         "darwin_x86_64": "580b3ea6231df5cb9760e27a889dfde21f391adbd58429d72be4684f789e8682",
@@ -48,7 +46,7 @@ implementation files under its private/ directory are repository-local.
 
 Chromium is currently supported. A platform missing from sha256 fails target
 selection; it never fetches a different platform’s archive. The browser-only
-module closure needs no Node or Go toolchain. Linux execution needs Chromium’s
+module closure needs no Node or Go toolchain. The [local manifest example](examples/browser/browsers.json) is a complete caller-owned input. Linux execution needs Chromium’s
 system libraries; the native Ubuntu CI image supplies them.
 
 <details>
@@ -62,6 +60,10 @@ system libraries; the native Ubuntu CI image supplies them.
 | Consumer guide | [docs/usage.md](docs/usage.md) |
 
 </details>
+
+## Documentation and examples
+
+See the [generated API reference](docs/README.md) and [runnable examples](examples/README.md).
 
 ## Development
 
@@ -86,3 +88,8 @@ constraints, and [ARCHITECTURE.md](ARCHITECTURE.md) for implementation decisions
 ## License
 
 [Apache License 2.0](LICENSE).
+
+[Sponsor us](https://github.com/mathematic-inc) · [Discuss questions and ideas](https://github.com/latticebuild/rules_playwright/discussions)
+
+Pull requests are limited to repository collaborators. Use Discussions for bugs,
+feature requests and support. Changes merge as squash commits.

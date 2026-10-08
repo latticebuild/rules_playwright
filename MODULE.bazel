@@ -1,34 +1,13 @@
 module(
     name = "latticebuild_playwright",
-    version = "0.0.0",
+    version = "0.1.0",
+    bazel_compatibility = [">=9.2.0"],
 )
 
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
 
-bazel_dep(name = "package_metadata", version = "0.0.13", dev_dependency = True)
-bazel_dep(name = "rules_nodejs", version = "6.7.5", dev_dependency = True)
-bazel_dep(name = "rules_bound", version = "0.2.1", dev_dependency = True)
-bazel_dep(name = "yq.bzl", version = "0.4.0", dev_dependency = True)
-
-node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node", dev_dependency = True)
-node.toolchain(node_version = "26.8.2")
-
-bound = use_extension("@rules_bound//bound:extensions.bzl", "bound", dev_dependency = True)
-bound.toolchain(version = "0.2.1")
-
-yq = use_extension("@yq.bzl//yq:extensions.bzl", "yq", dev_dependency = True)
-use_repo(yq, "yq_darwin_amd64", "yq_darwin_arm64", "yq_linux_amd64", "yq_linux_arm64", "yq_linux_ppc64le", "yq_linux_riscv64", "yq_linux_s390x", "yq_toolchains", "yq_windows_amd64", "yq_windows_arm64")
-
-register_toolchains(
-    "@yq_toolchains//:all",
-    dev_dependency = True,
-)
-
-bazel_dep(name = "latticebuild_js", version = "0.0.0", dev_dependency = True)
-
-node_modules = use_repo_rule("@latticebuild_js//js:repositories.bzl", "node_modules")
-
+bazel_dep(name = "latticebuild_graceproc", version = "0.1.0", dev_dependency = True)
 bazel_dep(name = "rules_go", version = "0.63.0", dev_dependency = True, repo_name = "io_bazel_rules_go")
 bazel_dep(name = "gazelle", version = "0.51.3", dev_dependency = True)
 
@@ -38,16 +17,10 @@ go_sdk.download(version = "1.27.1")
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps", dev_dependency = True)
 go_deps.from_file(go_mod = "//:go.mod")
 
-node_modules(
-    name = "browser_packages",
-    dev_dependency = True,
-    package_json = "//:package.json",
-)
-
 playwright = use_extension("//playwright:extensions.bzl", "playwright", dev_dependency = True)
 playwright.browser(
     name = "chromium",
-    manifest = "@browser_packages//node_modules/playwright-core:browsers.json",
+    manifest = "//examples/browser:browsers.json",
     sha256 = {
         "darwin_arm64": "d64771a096fffd48b49a65e481dda50ae43a7de55fb93acfa6aece26ec3b10db",
         "darwin_x86_64": "580b3ea6231df5cb9760e27a889dfde21f391adbd58429d72be4684f789e8682",
@@ -64,8 +37,6 @@ git_override(
     remote = "https://github.com/latticebuild/graceproc.git",
 )
 
-git_override(
-    module_name = "latticebuild_js",
-    commit = "13d7b1de76b19282dbc5dbc378ada1ef9ec10dd5",
-    remote = "https://github.com/latticebuild/rules_js.git",
-)
+# Documentation tools are root-only development dependencies.
+bazel_dep(name = "stardoc", version = "0.8.1", dev_dependency = True)
+bazel_dep(name = "protobuf", version = "36.2", dev_dependency = True)

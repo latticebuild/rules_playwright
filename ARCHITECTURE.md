@@ -14,8 +14,14 @@ has no compatible payload.
 Payload files remain native runfiles under one Chromium installation directory.
 An INSTALLATION_COMPLETE marker names that installation. Runners own writable
 validation state and temporary directories; they do not mutate the archive or
-use a developer's browser cache. The native test launches the selected payload
-from a differently named npm repository and performs a page assertion.
+use a developer's browser cache. The native test resolves the selected executable
+from the declared payload and checks JavaScript-rendered DOM from the HTML fixture.
 
 Only Chromium is supported. Linux hosts supply Chromium's operating-system
 libraries; those belong to the runner image rather than the browser archive.
+
+Native verification invokes the declared Chromium executable against the HTML
+example, observes complete JavaScript-updated DOM, and deliberately requests
+bounded shutdown through the development-only graceproc dependency. The selected
+browser payload stays immutable; profile state belongs to each probe. This keeps
+browser acquisition independent of JavaScript build execution.

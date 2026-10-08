@@ -3,12 +3,12 @@ package(default_visibility = ["//visibility:public"])
 exports_files([
     "go.mod",
     "go.sum",
-    "package.json",
 ])
 
 test_suite(
     name = "test",
     tests = [
+        "//examples:test",
         "//tests:browser_test",
         "//tests:validation_test",
     ],
@@ -18,8 +18,8 @@ filegroup(
     name = "artifacts",
     testonly = True,
     srcs = [
+        "//examples:artifacts",
         "//playwright:extensions",
-        "//tests:browser_probe",
         "@browser_payload//:chromium",
     ],
 )

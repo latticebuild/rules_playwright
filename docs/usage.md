@@ -1,13 +1,10 @@
 # Browser acquisition
 
-Pin `latticebuild_playwright` with `git_override` in your root MODULE.bazel.
-There is no BCR release yet. The development MODULE includes the exact
-foundation pins needed for this checkout; a browser-only consumer needs no
-JavaScript build rules unless it uses their npm repository or runner APIs.
-
-Prepare the caller's pnpm installation, then declare the browser extension.
-The example pins the development Playwright manifest and archives; use matching
-checksums when choosing another Playwright version.
+Declare `latticebuild_playwright` in your root MODULE.bazel, then select a
+caller-owned manifest and the checksums for your supported platforms. A manifest
+may be a local JSON file or a file exported from an installed Playwright package.
+The runnable example uses [a local manifest](../examples/browser/browsers.json),
+so browser acquisition is independent of npm installation.
 
 ```starlark
 playwright = use_extension("@latticebuild_playwright//playwright:extensions.bzl", "playwright")
@@ -32,7 +29,7 @@ platform fails target selection; it does not fetch another platform's
 archive. The current extension supports Chromium only.
 
 The hub's `:chromium` target exposes the native files and one
-INSTALLATION_COMPLETE marker. Pass it to rules_vite's `js_vitest.browser`.
+INSTALLATION_COMPLETE marker. Pass it to rules_js's `js_vitest.browser`.
 The runner derives a private installation layout from the marker and owns
 PLAYWRIGHT_BROWSERS_PATH. Repository preparation downloads the archive; tests
 perform no runtime browser installation.
@@ -52,3 +49,8 @@ const launchOptions = {
 
 Playwright creates a private profile there and removes it when the browser is
 closed. Workspace actions continue to use their own scratch directories.
+
+The [native browser example](../examples/browser/index.html) is rendered by the
+selected Chromium payload. Its Go test verifies JavaScript DOM updates and then
+requests supervised shutdown, with a private profile and bounded descendant
+cleanup. This probe's Go/process dependencies are development-only.

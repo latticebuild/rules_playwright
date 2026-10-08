@@ -1,0 +1,38 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load(":inventory.bzl", "browser_inventory")
+
+exports_files(["browsers.json"])
+
+browser_inventory(
+    name = "inventory",
+    testonly = True,
+    browser = "@browser_payload//:chromium",
+)
+
+go_test(
+    name = "test",
+    srcs = ["browser_test.go"],
+    data = [
+        "index.html",
+        ":inventory",
+        "@browser_payload//:chromium",
+    ],
+    env = {
+        "BROWSER_INVENTORY": "$(rlocationpath :inventory)",
+        "BROWSER_PAGE": "$(rlocationpath index.html)",
+    },
+    tags = ["no-sandbox"],
+    deps = [
+        "@io_bazel_rules_go//go/runfiles",
+        "@latticebuild_graceproc//:graceproc",
+    ],
+)
+
+filegroup(
+    name = "artifacts",
+    testonly = True,
+    srcs = [
+        ":test",
+        "@browser_payload//:chromium",
+    ],
+)

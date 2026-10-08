@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+  <body data-native="false">
+    <button aria-label="browser works">waiting</button>
+    <script>
+      document.querySelector("button").textContent = "ready";
+      document.body.dataset.native = String(navigator.platform.length > 0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "browsers": [
+    {
+      "name": "chromium",
+      "revision": "1247",
+      "installByDefault": true,
+      "browserVersion": "155.0.8059.12",
+      "title": "Chrome for Testing"
+    }
+  ]
+}

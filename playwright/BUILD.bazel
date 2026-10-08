@@ -9,3 +9,8 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = ["//playwright/private:playwright_bzl"],
 )
+
+exports_files(
+    ["extensions.bzl"],
+    visibility = ["//visibility:public"],
+)

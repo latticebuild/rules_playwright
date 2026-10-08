@@ -1,0 +1,5 @@
+{
+  "url": "https://github.com/latticebuild/rules_playwright/releases/download/{TAG}/rules_playwright-{VERSION}.tar.gz",
+  "integrity": "{INTEGRITY}",
+  "strip_prefix": "rules_playwright-{VERSION}"
+}
